@@ -4,7 +4,11 @@ require "pry"
 class DatabasePersistence
   def initialize(logger)
     @logger = logger
-    @db = PG.connect(dbname: "todos")
+    @db = if Sinatra::Base.production?
+            PG.connect(ENV['HEROKU_POSTGRESQL_GRAY_URL'])
+          else
+            PG.connect(dbname: "todos")
+          end
   end
 
   def query(statement, *params)
@@ -45,7 +49,7 @@ class DatabasePersistence
         completed: tuple["completed"] == "t" }
     end
   end
-  
+
   def create_new_list(list_name)
     sql = "INSERT INTO lists (name) VALUES ($1)"
     query(sql, list_name)
@@ -79,5 +83,9 @@ class DatabasePersistence
   def mark_all_todos_as_completed(list_id)
     sql = "UPDATE todos SET completed = true WHERE list_id = $1"
     query(sql, list_id)
+  end
+
+  def disconnect
+    @db.close
   end
 end

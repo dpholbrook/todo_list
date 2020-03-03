@@ -5,3 +5,9 @@ gem "sinatra-contrib"
 gem "erubis"
 gem "pg"
 gem "pry"
+
+ruby "2.4.4"
+
+group :production do
+  gem "puma"
+end

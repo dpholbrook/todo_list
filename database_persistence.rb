@@ -45,12 +45,7 @@ class DatabasePersistence
         completed: tuple["completed"] == "t" }
     end
   end
-
-=begin
-  - query(sql, parameters) runs query and returns object that is array of hashes, each representing a row
-  -
-=end
-
+  
   def create_new_list(list_name)
     sql = "INSERT INTO lists (name) VALUES ($1)"
     query(sql, list_name)

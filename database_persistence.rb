@@ -5,7 +5,7 @@ class DatabasePersistence
   def initialize(logger)
     @logger = logger
     @db = if Sinatra::Base.production?
-            PG.connect(ENV['HEROKU_POSTGRESQL_GRAY_URL'])
+            PG.connect(ENV['DATABASE_URL'])
           else
             PG.connect(dbname: "todos")
           end
